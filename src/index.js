@@ -7,18 +7,23 @@ const httpServer = http.createServer(app)
 const io = new WebSocketServer(httpServer)
 
 const notes = []
+
 app.use(express.static(__dirname +'/public'));
 
 io.on('connection', (socket)=>{
     console.log('connection established:', socket.id)
  
+    socket.emit('server:loadnotes', notes)
 
     socket.on('client:newnote', data => {
-        const note = {  id: uuid(),
+        const note = {  
+            id: uuid(),
             title: data.title,
-            description: data.description }
-        console.log(note)
+            description: data.description 
+        }
         notes.push(note)
+
+        socket.emit('server:newnote', note)
     })
 })
 
