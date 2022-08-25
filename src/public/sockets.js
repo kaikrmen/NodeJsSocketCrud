@@ -16,6 +16,10 @@ const getNote = (id) => {
 
 }
 
+const updateNote = (id, title, description) => { 
+    socket.emit('client:updatenote',{id, title, description})
+}
+
 socket.on('server:newnote', data =>{
     noteAppend(data)
 })
@@ -25,5 +29,11 @@ socket.on('server:loadnotes', data =>{
 })
 
 socket.on('server:selectednote', data =>{ 
-    console.log(data)
+    const title = document.querySelector('#title')
+    const description = document.querySelector('#description')
+
+    title.value = data.title
+    description.value = data.description
+
+    noteID = data.id
 })

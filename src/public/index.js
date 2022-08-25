@@ -5,7 +5,15 @@ const description = document.querySelector('#description')
 noteForm.addEventListener('submit', e => {
     e.preventDefault()
 
-    saveNote(title.value, description.value)
 
-  
+    if(noteID) {
+        updateNote(noteID, title.value, description.value)
+    } else {
+        saveNote(title.value, description.value)
+    }  
+
+    title.value = ''
+    description.value = ''
+
+    title.focus()
 })

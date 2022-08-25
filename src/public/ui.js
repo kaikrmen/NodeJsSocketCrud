@@ -1,9 +1,10 @@
 const notesList = document.querySelector('#notes') 
+let noteID = ''
 
 const appendNote = note => {
     const div = document.createElement('div')
     div.innerHTML = `
-    <div class="card card-body rounded-0 mb-2">
+    <div class="card card-body rounded-0 mb-2 animate__animated animate__fadeInUp">
         <div class="d-flex justify-content-between">
             <h1 class="h3 card-title">${note.title}</h1>
             <div>

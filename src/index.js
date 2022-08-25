@@ -23,17 +23,28 @@ io.on('connection', (socket)=>{
         }
         notes.push(note)
 
-        socket.emit('server:newnote', note)
+        io.emit('server:newnote', note)
     })
 
     socket.on('client:deletenote', (noteId) => { 
         notes = notes.filter((note) => note.id !== noteId);
-        socket.emit('server:loadnotes', notes)
+        io.emit('server:loadnotes', notes)
     })
 
     socket.on('client:getnote', (noteId) => {
         const note = notes.find(note => note.id === noteId)
         socket.emit('server:selectednote', note)
+    })
+
+    socket.on('client:updatenote', (updateNote) => {
+        notes = notes.map((note) => {
+            if(note.id ===updateNote.id) {
+                note.title = updateNote.title
+                note.description = updateNote.description
+            }
+            return note
+        })
+        io.emit('server:loadnotes', notes)
     })
 })
 
