@@ -6,7 +6,7 @@ const app = express()
 const httpServer = http.createServer(app) 
 const io = new WebSocketServer(httpServer)
 
-const notes = []
+let notes = []
 
 app.use(express.static(__dirname +'/public'));
 
@@ -24,6 +24,16 @@ io.on('connection', (socket)=>{
         notes.push(note)
 
         socket.emit('server:newnote', note)
+    })
+
+    socket.on('client:deletenote', (noteId) => { 
+        notes = notes.filter((note) => note.id !== noteId);
+        socket.emit('server:loadnotes', notes)
+    })
+
+    socket.on('client:getnote', (noteId) => {
+        const note = notes.find(note => note.id === noteId)
+        socket.emit('server:selectednote', note)
     })
 })
 
