@@ -1,39 +1,55 @@
-const socket = io()
+const socket = io.connect();
 
-const saveNote = (title, description) => {
-    socket.emit('client:newnote', {
-        title,
-        description
-   })
-}
+/**
+ * create a new note
+ * @param {string} title a title for a new note
+ * @param {string} description a description for a new note
+ */
+export const saveNote = (title, description) => {
+  socket.emit("client:newnote", {
+    title,
+    description,
+  });
+};
 
-const deleteNote = (id) =>{
-    socket.emit('client:deletenote', id)
-}
+/**
+ * delete a note based on an Id
+ * @param {string} id a note ID
+ */
+export const deleteNote = (id) => {
+  socket.emit("client:deletenote", id);
+};
 
-const getNote = (id) => { 
-    socket.emit('client:getnote', id)
+/**
+ *
+ * @param {string} id note ID
+ * @param {string} title note title
+ * @param {string} description note description
+ */
+export const updateNote = (_id, title, description) => {
+  socket.emit("client:updatenote", {
+    _id,
+    title,
+    description,
+  });
+};
 
-}
+/**
+ * Load an Array of Notes
+ * @param {function} callback A function to render Notes
+ */
+export const loadNotes = (callback) => {
+  socket.on("server:loadnotes", callback);
+};
 
-const updateNote = (id, title, description) => { 
-    socket.emit('client:updatenote',{id, title, description})
-}
+export const onNewNote = (callback) => {
+  socket.on("server:newnote", callback);
+};
 
-socket.on('server:newnote', data =>{
-    noteAppend(data)
-})
+export const onSelected = (callback) => {
+  socket.on("server:selectednote", callback);
+};
 
-socket.on('server:loadnotes', data =>{
-    loadnotes(data)
-})
-
-socket.on('server:selectednote', data =>{ 
-    const title = document.querySelector('#title')
-    const description = document.querySelector('#description')
-
-    title.value = data.title
-    description.value = data.description
-
-    noteID = data.id
-})
+export const getNoteById = (noteId) => {
+  socket.emit("client:getnote", noteId);
+};

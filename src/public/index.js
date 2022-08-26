@@ -1,19 +1,13 @@
-const noteForm = document.querySelector('#noteForm')
-const title = document.querySelector('#title')
-const description = document.querySelector('#description')
+import { appendNote, renderNotes, fillForm, onHandleSubmit } from "./ui.js";
+import { loadNotes, onNewNote, onSelected } from "./sockets.js";
 
-noteForm.addEventListener('submit', e => {
-    e.preventDefault()
+// Load initial Notes
+window.addEventListener("DOMContentLoaded", () => {
+  loadNotes(renderNotes);
+  onNewNote(appendNote);
+  onSelected(fillForm);
+});
 
-
-    if(noteID) {
-        updateNote(noteID, title.value, description.value)
-    } else {
-        saveNote(title.value, description.value)
-    }  
-
-    title.value = ''
-    description.value = ''
-
-    title.focus()
-})
+// Save a new Note
+const noteForm = document.querySelector("#noteForm");
+noteForm.addEventListener("submit", onHandleSubmit);
