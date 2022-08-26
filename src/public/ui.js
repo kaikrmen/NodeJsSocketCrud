@@ -32,11 +32,11 @@ const noteUI = (note) => {
 export const renderNotes = (notes) => {
   savedId = "";
   notesList.innerHTML = "";
-  notes.forEach((note) => notesList.append(noteUI(note)));
+  notes.reverse().forEach((note) => notesList.append(noteUI(note)));
 };
 
 export const appendNote = (note) => {
-  notesList.append(noteUI(note));
+  notesList.prepend(noteUI(note));
 };
 
 export const fillForm = (note) => {
